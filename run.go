@@ -9,6 +9,8 @@ import (
 	"fmt"
   "./lText"
   "./lCn"
+  "./lMonitor"
+  "runtime"
   // "net/http"
   // "net/url"
   // "io/ioutil"
@@ -21,14 +23,23 @@ import (
 func main() {
   terminal.Stdout.Color("y")
 
-  sFormat := lText.Line(1, "binance", "btc_usdt", 100000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, []string{"white","white","white","white","white","white","hidden","white","white"})
+  sFormat := lText.Line(1, "binance", "LRCBTC", 100000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, []string{"white","white","white","white","white","white","hidden","white","white"})
   lText.Print(sFormat)
   lText.Print(sFormat)
   lText.Print(sFormat)
 
+  lMonitor.ListMonitorInit(lMonitor.ListMonitor{  Coin : "LRCBTC", Echange : "binance", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance })
+  // fmt.Println( l ) 
 
-  json := lCn.GetPriceKucoin("ZPT-ETH")
-  fmt.Println( json["lastDealPrice"] )
+  lMonitor.Go()
+
+  json, err := lCn.GetPriceKucoin("ZPT-ETH")
+  if err != nil{
+    _, file, line, _ := runtime.Caller(0)
+    lText.ClPrint("error: GetPriceKucoin file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n", "red")
+  }else{
+    fmt.Println( json["lastDealPrice"] )
+  }
 
   return
 

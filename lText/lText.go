@@ -28,16 +28,16 @@ func Color(color string, t string) string{
 	return "@{" + colorMap[color] + t + "}"
 }
 
-func ClPrint(text string, cl string){
+func ClPrint(text string, cl string){		// распечать с заданным цветом
    color.Print(Color(cl, ""), text) 
 }
 
-func Cl(text string, cl string) string {
+func Cl(text string, cl string) string {  	// получить цвет
    return Color(cl, "") + text 
 }
 
 
-func Print(text string){
+func Print(text string){					// печатать в цвете подготовленную строку
   color.Print(text)
 }
 
