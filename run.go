@@ -6,11 +6,11 @@ package main
 import (
   "github.com/wsxiaoys/terminal"
   // "github.com/wsxiaoys/terminal/color"
-	"fmt"
-  "./lText"
+	// "fmt"
+  // "./lText"
   "./lCn"
   "./lMonitor"
-  "runtime"
+  // "runtime"
   // "net/http"
   // "net/url"
   // "io/ioutil"
@@ -23,23 +23,33 @@ import (
 func main() {
   terminal.Stdout.Color("y")
 
-  sFormat := lText.Line(1, "binance", "LRCBTC", 100000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, []string{"white","white","white","white","white","white","hidden","white","white"})
-  lText.Print(sFormat)
-  lText.Print(sFormat)
-  lText.Print(sFormat)
+  // sFormat := lText.Line(1, "binance", "LRCBTC", 100000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, []string{"white","white","white","white","white","white","hidden","white","white"})
+  // lText.Print(sFormat)
 
-  lMonitor.ListMonitorInit(lMonitor.ListMonitor{  Coin : "LRCBTC", Echange : "binance", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance })
+
+  monitor := new(lMonitor.Monitor)
+  // var monitor lMonitor.Monitor
+
+  // fn := 
+  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "ZPT-ETH",   Echange : "kucoin",    Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceKucoin    } )
+  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "LRCBTC",    Echange : "binance",   Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance   } )
+  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "HOLD_BTC",  Echange : "cryptopia", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceCryptopia } )
+  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "jnt_usdt",  Echange : "gate",      Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceGate      } )
+
+
+
+  monitor.GetPrice()
   // fmt.Println( l ) 
 
-  lMonitor.Go()
+  
 
-  json, err := lCn.GetPriceKucoin("ZPT-ETH")
-  if err != nil{
-    _, file, line, _ := runtime.Caller(0)
-    lText.ClPrint("error: GetPriceKucoin file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n", "red")
-  }else{
-    fmt.Println( json["lastDealPrice"] )
-  }
+  // json, err := lCn.GetPriceKucoin("ZPT-ETH")
+  // if err != nil{
+  //   _, file, line, _ := runtime.Caller(0)
+  //   lText.ClPrint("error: GetPriceKucoin file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n", "red")
+  // }else{
+  //   fmt.Println( json["lastDealPrice"] )
+  // }
 
   return
 
