@@ -35,6 +35,8 @@ func (self *Monitor) AddCoin(l lCommon.ListMonitor)(err error){
 	// lCommon.ListMonitor{  Coin : "LRCBTC", Echange : "binance", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance }
 	if l.UpPerPercent == 0 		{ l.UpPerPercent = 0.02 }
 	if l.DownPerPercent == 0 	{ l.DownPerPercent = 0.02 }	
+	if l.UpLine == 0 			{ l.UpLine = 99999.99 }	
+	if l.DownLine == 0 			{ l.DownLine = 0.0 }	
 	l.Index = self.index
 	self.index = self.index + 1
 	self.listTask = append(self.listTask, l)
@@ -128,10 +130,10 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 	}
 
 	color := []string{"white","white","white","white","white","white","white","white","white"}
-	if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer){
+	if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
 		color = []string{"white","white","white","green","white","white","white","white","white"}			
 		*soundFlagUp = 1
-	}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer) {
+	}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer || self.ListTaskSync[i].Price < self.ListTaskSync[i].DownLine) {
 		color = []string{"white","white","white","red","white","white","white","white","white"}
 		*soundFlagDown = -1
 	}
