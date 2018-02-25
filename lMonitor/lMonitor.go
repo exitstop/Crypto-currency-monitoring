@@ -33,8 +33,8 @@ func NewMonitor() *Monitor {
 
 func (self *Monitor) AddCoin(l lCommon.ListMonitor)(err error){
 	// lCommon.ListMonitor{  Coin : "LRCBTC", Echange : "binance", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance }
-	if l.UpPerPercent == 0 		{ l.UpPerPercent = 0.05 }
-	if l.DownPerPercent == 0 	{ l.DownPerPercent = 0.05 }
+	if l.UpPerPercent == 0 		{ l.UpPerPercent = 0.02 }
+	if l.DownPerPercent == 0 	{ l.DownPerPercent = 0.02 }	
 	l.Index = self.index
 	self.index = self.index + 1
 	self.listTask = append(self.listTask, l)
@@ -77,7 +77,6 @@ func (self *Monitor) Print()(err error){
 
 		color := self.priceComparison(&soundFlagUp, &soundFlagDown, i)
 
-
 		self.listTask[i] = *self.ListTaskSync[i]
 
 		lText.Print( lText.Line(*self.ListTaskSync[i], color ) )		
@@ -111,24 +110,28 @@ func (self *Monitor) soundAllert(soundFlagUp int, soundFlagDown int){
 }
 
 func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int)([]string){
-	var timeLimit = 60
+	var timeLimit = 90
 	if self.ListTaskSync[i].PriceLast == 0{
 		self.ListTaskSync[i].Time = timeLimit
 		self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
+		self.ListTaskSync[i].UpPer = 	self.ListTaskSync[i].PriceLast + self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].UpPerPercent
+		self.ListTaskSync[i].DownPer = 	self.ListTaskSync[i].PriceLast - self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].DownPerPercent
 	}else{
 		if self.ListTaskSync[i].Time == 0{
 			self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
 			self.ListTaskSync[i].Time = timeLimit
+			self.ListTaskSync[i].UpPer = 	self.ListTaskSync[i].PriceLast + self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].UpPerPercent
+			self.ListTaskSync[i].DownPer = 	self.ListTaskSync[i].PriceLast - self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].DownPerPercent
 		}else{
 			self.ListTaskSync[i].Time = self.ListTaskSync[i].Time - 1
 		}			
 	}
-	
+
 	color := []string{"white","white","white","white","white","white","white","white","white"}
-	if( self.ListTaskSync[i].Price > self.ListTaskSync[i].PriceLast){
+	if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer){
 		color = []string{"white","white","white","green","white","white","white","white","white"}			
 		*soundFlagUp = 1
-	}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].PriceLast) {
+	}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer) {
 		color = []string{"white","white","white","red","white","white","white","white","white"}
 		*soundFlagDown = -1
 	}
