@@ -73,48 +73,16 @@ func (self *Monitor) Print()(err error){
 
 	var soundFlagDown = 0
 	var soundFlagUp = 0
-	for i:=0 ; i < len(self.ListTaskSync); i++ {
-		color := []string{"white","white","white","white","white","white","white","white","white"}
-		
-		var timeLimit = 60
-		if self.ListTaskSync[i].PriceLast == 0{
-			self.ListTaskSync[i].Time = timeLimit
-			self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
-		}else{
-			if self.ListTaskSync[i].Time == 0{
-				self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
-				self.ListTaskSync[i].Time = timeLimit
-			}else{
-				self.ListTaskSync[i].Time = self.ListTaskSync[i].Time - 1
-			}			
-		}
-		if( self.ListTaskSync[i].Price < self.ListTaskSync[i].PriceLast){
-			color = []string{"white","white","white","red","white","white","white","white","white"}
-			soundFlagDown = -1
-		}else if (self.ListTaskSync[i].Price > self.ListTaskSync[i].PriceLast) {
-			color = []string{"white","white","white","green","white","white","white","white","white"}
-			soundFlagUp = 1
-		}
+	for i:=0 ; i < len(self.ListTaskSync); i++ {		
+
+		color := self.priceComparison(&soundFlagUp, &soundFlagDown, i)
+
+
 		self.listTask[i] = *self.ListTaskSync[i]
 
 		lText.Print( lText.Line(*self.ListTaskSync[i], color ) )		
 	}
-
-	if(soundFlagDown == -1){
-		go func(){
-			if err := lCommon.PlayMusic("./sound/obj_belltower.mp3", 2 ) ; err != nil {
-				self.listError = append(self.listError, err.Error() )
-			}
-		}()
-	}
-	if(soundFlagUp == 1){
-		go func(){
-			if err := lCommon.PlayMusic("./sound/2-sirena-temnoe-vremya.mp3", 2 ) ; err != nil {
-				self.listError = append(self.listError, err.Error() )
-			}
-		}()
-	}
-
+	self.soundAllert(soundFlagUp, soundFlagDown)
 
 	lText.ClPrint("\n", "white")
 	lText.ClPrint("\n", "white")
@@ -123,4 +91,46 @@ func (self *Monitor) Print()(err error){
 	}
 	self.listError = self.listError[:]
 	return nil
+}
+
+func (self *Monitor) soundAllert(soundFlagUp int, soundFlagDown int){
+	if(soundFlagUp == 1){
+		go func(){
+			if err := lCommon.PlayMusic("./sound/2-sirena-temnoe-vremya.mp3", 2 ) ; err != nil {
+				self.listError = append(self.listError, err.Error() )
+			}
+		}()
+	}
+	if(soundFlagDown == -1){
+		go func(){
+			if err := lCommon.PlayMusic("./sound/obj_belltower.mp3", 2 ) ; err != nil {
+				self.listError = append(self.listError, err.Error() )
+			}
+		}()
+	}
+}
+
+func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int)([]string){
+	var timeLimit = 60
+	if self.ListTaskSync[i].PriceLast == 0{
+		self.ListTaskSync[i].Time = timeLimit
+		self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
+	}else{
+		if self.ListTaskSync[i].Time == 0{
+			self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
+			self.ListTaskSync[i].Time = timeLimit
+		}else{
+			self.ListTaskSync[i].Time = self.ListTaskSync[i].Time - 1
+		}			
+	}
+	
+	color := []string{"white","white","white","white","white","white","white","white","white"}
+	if( self.ListTaskSync[i].Price > self.ListTaskSync[i].PriceLast){
+		color = []string{"white","white","white","green","white","white","white","white","white"}			
+		*soundFlagUp = 1
+	}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].PriceLast) {
+		color = []string{"white","white","white","red","white","white","white","white","white"}
+		*soundFlagDown = -1
+	}
+	return color
 }
