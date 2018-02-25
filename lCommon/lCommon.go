@@ -1,9 +1,12 @@
 package lCommon
 
 import (
-  "os"
-  "os/exec"
-  "runtime"
+	"io"
+	"os"
+	"os/exec"
+	"runtime"
+	"github.com/hajimehoshi/oto"
+	"github.com/hajimehoshi/go-mp3"
 )
 
 
@@ -12,6 +15,8 @@ type ListMonitor struct{
 	Coin string
 	Exchange string
 	Price float64
+	PriceLast float64
+	Time int
 	UpPerPercent float64
 	DownPerPercent float64
 	UpPer float64
@@ -46,4 +51,31 @@ func CallClear() {
     } else { //unsupported platform
         panic("Your platform is unsupported! I can't clear terminal screen :(")
     }
+}
+
+
+func PlayMusic(path string, div int64) error {
+	f, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	d, err := mp3.NewDecoder(f)
+	if err != nil {
+		return err
+	}
+	defer d.Close()
+
+	p, err := oto.NewPlayer(d.SampleRate(), 2, 2, 8192)
+	if err != nil {
+		return err
+	}	
+	defer p.Close()
+
+	if _, err := io.CopyN(p, d, div * 8192 * 22  ); err != nil {
+		return err
+	}	
+
+	return nil
 }

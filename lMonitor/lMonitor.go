@@ -20,14 +20,14 @@ import (
 type Monitor struct {
 	index int
 	listTask 		[]lCommon.ListMonitor
-	ListTaskSync	map[int]lCommon.ListMonitor
+	ListTaskSync	map[int]*lCommon.ListMonitor
 	listError 		[]string
 }
 
 
 func NewMonitor() *Monitor {
     m := new(Monitor)
-    m.ListTaskSync = make(map[int]lCommon.ListMonitor)
+    m.ListTaskSync = make(map[int]*lCommon.ListMonitor)
     return m
 }
 
@@ -64,20 +64,63 @@ func (self *Monitor) GetPrice()(err error){
 	}	
 	for range self.listTask {
 		m := <-c
-		self.ListTaskSync[m.Index] = m
+		self.ListTaskSync[m.Index] = &m
 	}
 	return nil
 }
 
 func (self *Monitor) Print()(err error){
+
+	var soundFlagDown = 0
+	var soundFlagUp = 0
 	for i:=0 ; i < len(self.ListTaskSync); i++ {
 		color := []string{"white","white","white","white","white","white","white","white","white"}
-		lText.Print( lText.Line(self.ListTaskSync[i], color ) )		
+		
+		var timeLimit = 60
+		if self.ListTaskSync[i].PriceLast == 0{
+			self.ListTaskSync[i].Time = timeLimit
+			self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
+		}else{
+			if self.ListTaskSync[i].Time == 0{
+				self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
+				self.ListTaskSync[i].Time = timeLimit
+			}else{
+				self.ListTaskSync[i].Time = self.ListTaskSync[i].Time - 1
+			}			
+		}
+		if( self.ListTaskSync[i].Price < self.ListTaskSync[i].PriceLast){
+			color = []string{"white","white","white","red","white","white","white","white","white"}
+			soundFlagDown = -1
+		}else if (self.ListTaskSync[i].Price > self.ListTaskSync[i].PriceLast) {
+			color = []string{"white","white","white","green","white","white","white","white","white"}
+			soundFlagUp = 1
+		}
+		self.listTask[i] = *self.ListTaskSync[i]
+
+		lText.Print( lText.Line(*self.ListTaskSync[i], color ) )		
 	}
+
+	if(soundFlagDown == -1){
+		go func(){
+			if err := lCommon.PlayMusic("./sound/obj_belltower.mp3", 2 ) ; err != nil {
+				self.listError = append(self.listError, err.Error() )
+			}
+		}()
+	}
+	if(soundFlagUp == 1){
+		go func(){
+			if err := lCommon.PlayMusic("./sound/2-sirena-temnoe-vremya.mp3", 2 ) ; err != nil {
+				self.listError = append(self.listError, err.Error() )
+			}
+		}()
+	}
+
+
 	lText.ClPrint("\n", "white")
 	lText.ClPrint("\n", "white")
 	for _,i := range self.listError{
 		 lText.ClPrint(i, "red")
 	}
+	self.listError = self.listError[:]
 	return nil
 }
