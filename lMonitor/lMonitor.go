@@ -21,6 +21,7 @@ type Monitor struct {
 	index int
 	listTask 		[]lCommon.ListMonitor
 	ListTaskSync	map[int]lCommon.ListMonitor
+	listError 		[]string
 }
 
 
@@ -42,7 +43,6 @@ func (self *Monitor) AddCoin(l lCommon.ListMonitor)(err error){
 
 func (self *Monitor) GetPrice()(err error){
 	c := make(chan lCommon.ListMonitor)
-
 	for _, element := range self.listTask {
 		go func(element lCommon.ListMonitor, c chan lCommon.ListMonitor) {
 				// defer waitGroup.Done()
@@ -50,7 +50,8 @@ func (self *Monitor) GetPrice()(err error){
 		        // json, err := element.CallBack(element.Coin)
 		        if err != nil{
 		          _, file, line, _ := runtime.Caller(0)
-		          lText.ClPrint("error: GetPrice file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n" + err.Error() + "\n", "red")
+		          self.listError = append(self.listError, "error: GetPrice file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n" + err.Error() + "\n")
+		          // lText.ClPrint("error: GetPrice file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n" + err.Error() + "\n", "red")
 		          element.Price = 0
 		          c <- element
 		        }else{
@@ -58,16 +59,13 @@ func (self *Monitor) GetPrice()(err error){
 		        	c <- element
 		        	// element.Price =  json["lastDealPrice"].(float64)
 		        	// fmt.Println( fmt.Sprintf ( "%.8f",  element.Price ) )
-		        }
-		        
+		        }		        
 		    } (element, c);		
-	}
-	
+	}	
 	for range self.listTask {
 		m := <-c
 		self.ListTaskSync[m.Index] = m
 	}
-
 	return nil
 }
 
@@ -75,8 +73,11 @@ func (self *Monitor) Print()(err error){
 	for i:=0 ; i < len(self.ListTaskSync); i++ {
 		color := []string{"white","white","white","white","white","white","white","white","white"}
 		lText.Print( lText.Line(self.ListTaskSync[i], color ) )		
-		// fmt.Println(lText.Line(self.ListTaskSync[i], []string{"white","white","white","white","white","white","white","white","white"}))
-		// fmt.Println(self.ListTaskSync[i])
+	}
+	lText.ClPrint("\n", "white")
+	lText.ClPrint("\n", "white")
+	for _,i := range self.listError{
+		 lText.ClPrint(i, "red")
 	}
 	return nil
 }
