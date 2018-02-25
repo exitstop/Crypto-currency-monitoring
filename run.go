@@ -10,6 +10,7 @@ import (
   // "./lText"
   "./lCn"
   "./lMonitor"
+  "./lCommon"
   // "runtime"
   // "net/http"
   // "net/url"
@@ -25,10 +26,10 @@ func main() {
 
   monitor := lMonitor.NewMonitor()
 
-  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "ZPT-ETH",   Echange : "kucoin",    Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceKucoin    } )
-  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "LRCBTC",    Echange : "binance",   Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance   } )
-  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "HOLD_BTC",  Echange : "cryptopia", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceCryptopia } )
-  monitor.AddCoin(lMonitor.ListMonitor{  Coin : "jnt_usdt",  Echange : "gate",      Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceGate      } )
+  monitor.AddCoin(lCommon.ListMonitor{  Coin : "ZPT-ETH",   Exchange : "kucoin",    Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceKucoin    } )
+  monitor.AddCoin(lCommon.ListMonitor{  Coin : "LRCBTC",    Exchange : "binance",   Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance   } )
+  monitor.AddCoin(lCommon.ListMonitor{  Coin : "HOLD_BTC",  Exchange : "cryptopia", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceCryptopia } )
+  monitor.AddCoin(lCommon.ListMonitor{  Coin : "jnt_usdt",  Exchange : "gate",      Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceGate      } )
 
   monitor.GetPrice()
   monitor.Print()
