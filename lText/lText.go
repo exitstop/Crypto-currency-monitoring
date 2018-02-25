@@ -46,11 +46,10 @@ func NullCount(number float64) int {
 	var ret int = 0
 	if number > 1{
 		var n = int(number)
-		for n%10 == 0 && n > 10 {
+		for n%10 == 0 || n > 10 {
 			n/=10
-			ret++
+			ret = ret + 1
 		}
-		ret+=3
 		return ret
 	}else{
 		return ret
