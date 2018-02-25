@@ -79,6 +79,18 @@ func GetPriceGate(coin string) (map[string]interface{}, error){
 	}	
 }
 
-
+func GetPriceBittrex(coin string) (map[string]interface{}, error){
+	nameFunction := "Bittrex"
+	resp, err := http.Get("https://bittrex.com/api/v1.1/public/getticker?market=" + coin)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
+	json, err := Connect(resp)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
+	if mp, ok := json["result"].(map[string]interface{}); ok{
+		mp["lastDealPrice"] = mp["Last"]
+		return 	mp, nil
+	}else{
+		return 	nil, errors.New(nameFunction + "() Not found key json['data']")
+	}	
+}
 
 

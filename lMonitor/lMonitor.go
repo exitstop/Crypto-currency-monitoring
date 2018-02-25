@@ -34,8 +34,11 @@ func NewMonitor() *Monitor {
 
 func (self *Monitor) AddCoin(l lCommon.ListMonitor)(err error){
 	// lCommon.ListMonitor{  Coin : "LRCBTC", Echange : "binance", Price : 0, UpPerPercent : 0, DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0, CallBack : lCn.GetPriceBinance }
-	if l.UpPerPercent == 0 		{ l.UpPerPercent = 0.02 }
-	if l.DownPerPercent == 0 	{ l.DownPerPercent = 0.02 }	
+	if l.UpPerPercent == 0 		{ l.UpPerPercent = 0.03 }
+	if l.DownPerPercent == 0 	{ l.DownPerPercent = 0.03 }	
+
+
+
 	if l.UpLine == 0 			{ l.UpLine = 99999.99 }	
 	if l.DownLine == 0 			{ l.DownLine = 0.0 }	
 	l.Index = self.index
@@ -91,7 +94,7 @@ func (self *Monitor) Print()(err error){
 	for _,i := range self.listError{
 		 lText.ClPrint(i, "red")
 	}
-	self.listError = self.listError[:]
+	self.listError = self.listError[:0]
 	return nil
 }
 
@@ -129,7 +132,7 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 		}else{
 			self.ListTaskSync[i].Time = self.ListTaskSync[i].Time - 1
 		}	
-		if self.ListTaskSync[i].Time%2 == 1{
+		if self.ListTaskSync[i].Time%3 == 1{
 			self.ListTaskSync[i].PriceLastTick = self.ListTaskSync[i].Price
 		}	
 	}
