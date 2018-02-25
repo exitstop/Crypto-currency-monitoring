@@ -117,17 +117,21 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 	if self.ListTaskSync[i].PriceLast == 0{
 		self.ListTaskSync[i].Time = timeLimit
 		self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
+		self.ListTaskSync[i].PriceLastTick = self.ListTaskSync[i].Price
 		self.ListTaskSync[i].UpPer = 	self.ListTaskSync[i].PriceLast + self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].UpPerPercent
 		self.ListTaskSync[i].DownPer = 	self.ListTaskSync[i].PriceLast - self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].DownPerPercent
 	}else{
 		if self.ListTaskSync[i].Time == 0{
-			self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
+			self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price			
 			self.ListTaskSync[i].Time = timeLimit
 			self.ListTaskSync[i].UpPer = 	self.ListTaskSync[i].PriceLast + self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].UpPerPercent
 			self.ListTaskSync[i].DownPer = 	self.ListTaskSync[i].PriceLast - self.ListTaskSync[i].PriceLast*self.ListTaskSync[i].DownPerPercent
 		}else{
 			self.ListTaskSync[i].Time = self.ListTaskSync[i].Time - 1
-		}			
+		}	
+		if self.ListTaskSync[i].Time%2 == 1{
+			self.ListTaskSync[i].PriceLastTick = self.ListTaskSync[i].Price
+		}	
 	}
 
 	color := []string{"white","white","white","white","white","white","white","white","white","white"}
@@ -135,11 +139,17 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 	if( self.ListTaskSync[i].Coin == "BTCUSDT") { self.Btcusdt = self.ListTaskSync[i].Price }
 
 	if( self.ListTaskSync[i].Price != 0){
-		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
+		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].PriceLastTick){
 			color = []string{"white","white","white","green","white","white","white","white","white","white"}			
+		}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].PriceLastTick) {
+			color = []string{"white","white","white","red","white","white","white","white","white","white"}
+		}
+
+		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
+			color = []string{"white","white","green","green","green","white","white","white","white","white"}			
 			*soundFlagUp = 1
 		}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer || self.ListTaskSync[i].Price < self.ListTaskSync[i].DownLine) {
-			color = []string{"white","white","white","red","white","white","white","white","white","white"}
+			color = []string{"white","white","red","red","red","white","white","white","white","white"}
 			*soundFlagDown = -1
 		}
 	}
