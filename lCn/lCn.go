@@ -8,9 +8,9 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	//"reflect"  //  typ := reflect.TypeOf(resp).Elem(); fmt.Println(typ) // определить тип элемента  
-	// "fmt"
 	"strconv"
 	// "time"
+	// "fmt"
     )
 
 
@@ -93,4 +93,18 @@ func GetPriceBittrex(coin string) (map[string]interface{}, error){
 	}	
 }
 
-
+//  https://docs.bitfinex.com/v1/reference#rest-public-symbol-details
+func GetPriceBitfinex(coin string) (map[string]interface{}, error){
+	nameFunction := "Bitfinex"
+	resp, err := http.Get("https://api.bitfinex.com/v1/pubticker/" + coin)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
+	json, err := Connect(resp)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
+	if _, ok := json["last_price"]; ok{
+		json["lastDealPrice"], err = strconv.ParseFloat(json["last_price"].(string), 64)
+		if err != nil{ return nil, err }
+		return 	json, nil
+	}else{
+		return 	nil, errors.New(nameFunction + "() Not found key json['last_price']")
+	}	
+}
