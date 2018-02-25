@@ -24,6 +24,7 @@ type ListMonitor struct{
 	UpLine float64
 	DownLine float64
 	Hodl float64
+	HodlUsd float64
 	CallBack func(string)(map[string]interface{}, error)
 }
 

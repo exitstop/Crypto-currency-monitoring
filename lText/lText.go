@@ -78,20 +78,23 @@ func GBlock(number float64) string {
 // 		Cl(hodl_,c[8]) + "\n")
 // }
 
-func Line(l lCommon.ListMonitor, c []string) string {
+func Line(l lCommon.ListMonitor, Btcusdt float64, c []string) string {
 	if l.Price == 0 { for i,_ := range c { c[i] = "magenta"} }
 	index_ 		:= fmt.Sprintf("%3d", l.Index)
 	exchange_	:= fmt.Sprintf("%10s", l.Exchange)
 	coin_		:= fmt.Sprintf("%10s", l.Coin)
+	l.Hodl 		= l.Hodl * l.Price
+	l.HodlUsd   = l.Hodl * Btcusdt
 	price_		:= GBlock(l.Price);		if l.Price == 0.0 				{ c[3]="hidden"; }
 	upPer_		:= GBlock(l.UpPer);		if l.UpPer == 0.0 				{ c[4]="hidden"; }
 	downPer_	:= GBlock(l.DownPer);	if l.DownPer == 0.0				{ c[5]="hidden"; } 
 	upLine_		:= GBlock(l.UpLine);	if l.UpLine == 99999.99000	 	{ c[6]="hidden"; }  
 	downLine_	:= GBlock(l.DownLine);	if l.DownLine == 0.0			{ c[7]="hidden"; } 
 	hodl_		:= GBlock(l.Hodl);		if l.Hodl == 0.0				{ c[8]="hidden"; }
+	hodlUsd_	:= GBlock(l.HodlUsd);	if l.HodlUsd == 0.0				{ c[9]="hidden"; }
 
 	return (Cl(index_, c[0]) + " " +Cl(exchange_,c[1]) + " " +Cl(coin_,c[2]) + " " +Cl(price_,c[3]) + " " +
 		Cl(upPer_,c[4]) + " " +Cl(downPer_,c[5]) + " " + 	
 		Cl(upLine_,c[6]) + " " +Cl(downLine_,c[7]) + " " + 
-		Cl(hodl_,c[8]) + "\n")
+		Cl(hodl_,c[8])+ " " + Cl(hodlUsd_,c[9]) + "\n")
 }

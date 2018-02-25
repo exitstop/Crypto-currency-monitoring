@@ -22,6 +22,7 @@ type Monitor struct {
 	listTask 		[]lCommon.ListMonitor
 	ListTaskSync	map[int]*lCommon.ListMonitor
 	listError 		[]string
+	Btcusdt float64
 }
 
 
@@ -81,7 +82,7 @@ func (self *Monitor) Print()(err error){
 
 		self.listTask[i] = *self.ListTaskSync[i]
 
-		lText.Print( lText.Line(*self.ListTaskSync[i], color ) )		
+		lText.Print( lText.Line(*self.ListTaskSync[i], self.Btcusdt, color ) )		
 	}
 	self.soundAllert(soundFlagUp, soundFlagDown)
 
@@ -129,13 +130,18 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 		}			
 	}
 
-	color := []string{"white","white","white","white","white","white","white","white","white"}
-	if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
-		color = []string{"white","white","white","green","white","white","white","white","white"}			
-		*soundFlagUp = 1
-	}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer || self.ListTaskSync[i].Price < self.ListTaskSync[i].DownLine) {
-		color = []string{"white","white","white","red","white","white","white","white","white"}
-		*soundFlagDown = -1
+	color := []string{"white","white","white","white","white","white","white","white","white","white"}
+
+	if( self.ListTaskSync[i].Coin == "BTCUSDT") { self.Btcusdt = self.ListTaskSync[i].Price }
+
+	if( self.ListTaskSync[i].Price != 0){
+		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
+			color = []string{"white","white","white","green","white","white","white","white","white","white"}			
+			*soundFlagUp = 1
+		}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer || self.ListTaskSync[i].Price < self.ListTaskSync[i].DownLine) {
+			color = []string{"white","white","white","red","white","white","white","white","white","white"}
+			*soundFlagDown = -1
+		}
 	}
 	return color
 }
