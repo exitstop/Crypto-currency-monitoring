@@ -32,7 +32,7 @@ func GetPriceKucoin(coin string) (map[string]interface{}, error){
 	if mp, ok := json["data"].(map[string]interface{}); ok{
 		return 	mp, nil
 	}else{
-		return 	nil, errors.New("GetPriceKucoin() Not foun key json['data']")
+		return 	nil, errors.New(nameFunction + "() Not foun key json['data']")
 	}
 }
 
@@ -47,7 +47,7 @@ func GetPriceBinance(coin string) (map[string]interface{}, error){
 		if err != nil{ return nil, err }
 		return 	json, nil
 	}else{
-		return 	nil, errors.New("GetPriceKucoin() Not foun key json['data']")
+		return 	nil, errors.New(nameFunction + "() Not foun key json['data']")
 	}
 }
 
@@ -61,7 +61,7 @@ func GetPriceCryptopia(coin string) (map[string]interface{}, error){
 		mp["lastDealPrice"] = mp["LastPrice"]
 		return 	mp, nil
 	}else{
-		return 	nil, errors.New("GetPriceKucoin() Not foun key json['data']")
+		return 	nil, errors.New(nameFunction + "() Not foun key json['data']")
 	}
 }
 
@@ -71,11 +71,11 @@ func GetPriceGate(coin string) (map[string]interface{}, error){
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
-	if mp, ok := json["Data"].(map[string]interface{}); ok{
-		mp["lastDealPrice"] = mp["last"]
-		return 	mp, nil
+	if _, ok := json["last"].(float64); ok{
+		json["lastDealPrice"] = json["last"].(float64)
+		return 	json, nil
 	}else{
-		return 	nil, errors.New("GetPriceKucoin() Not foun key json['data']")
+		return 	nil, errors.New(nameFunction + "() Not foun key json['last']")
 	}	
 }
 
