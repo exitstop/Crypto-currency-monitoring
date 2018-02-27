@@ -61,7 +61,11 @@ func (self *Monitor) GetPrice()(err error){
 		          element.Price = 0
 		          c <- element
 		        }else{
-		        	element.Price = json["lastDealPrice"].(float64)
+		        	if mp, ok := json["lastDealPrice"].(float64); ok{
+		        		element.Price = mp
+		        	}else{
+		        		element.Price = 0
+		        	}
 		        	c <- element
 		        	// element.Price =  json["lastDealPrice"].(float64)
 		        	// fmt.Println( fmt.Sprintf ( "%.8f",  element.Price ) )
@@ -116,7 +120,7 @@ func (self *Monitor) soundAllert(soundFlagUp int, soundFlagDown int){
 }
 
 func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int)([]string){
-	var timeLimit = 90
+	var timeLimit = 180
 	if self.ListTaskSync[i].PriceLast == 0{
 		self.ListTaskSync[i].Time = timeLimit
 		self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
