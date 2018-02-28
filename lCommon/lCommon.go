@@ -7,6 +7,8 @@ import (
 	"runtime"
 	"github.com/hajimehoshi/oto"
 	"github.com/hajimehoshi/go-mp3"
+	"strconv"
+    "time"
 )
 
 
@@ -81,4 +83,10 @@ func PlayMusic(path string, div int64) error {
 	}	
 
 	return nil
+}
+
+
+
+func Timestamp() (string) {
+    return strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 }

@@ -54,6 +54,8 @@ func NewMonitor() *Monitor {
     m.dbJson, err = lJsonLog.ReadJson();
     if err != nil {
     	fmt.Println("Not found dat1")
+    	m.dbJson = make(map[string]interface{})
+    	m.dbJson["statistics"] = 555
     }
     return m
 }

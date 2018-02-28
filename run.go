@@ -52,7 +52,8 @@ func main() {
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "jnt_usdt", Exchange: "gate", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceGate})
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "nas_usdt", Exchange: "gate", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceGate})
 
-	monitor.AddCoin(lCommon.ListMonitor{Coin: "HOLD_BTC", Exchange: "cryptopia", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0.00000570, DownLine: 0, Hodl: 56925.80102849, CallBack: lCn.GetPriceCryptopia})
+	monitor.AddCoin(lCommon.ListMonitor{Coin: "CEFS_USDT", Exchange: "cryptopia", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceCryptopia})
+  monitor.AddCoin(lCommon.ListMonitor{Coin: "HOLD_BTC", Exchange: "cryptopia", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0.00000570, DownLine: 0, Hodl: 56925.80102849, CallBack: lCn.GetPriceCryptopia})
 
 
 	for {
