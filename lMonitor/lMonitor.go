@@ -13,6 +13,8 @@ import (
 	"../lCommon"
 	// "sync"
 	// "../lCn"
+	"os"
+	"os/signal"
     )
 
 
@@ -23,12 +25,25 @@ type Monitor struct {
 	ListTaskSync	map[int]*lCommon.ListMonitor
 	listError 		[]string
 	Btcusdt float64
+	MSignal chan os.Signal
 }
 
 
 func NewMonitor() *Monitor {
     m := new(Monitor)
     m.ListTaskSync = make(map[int]*lCommon.ListMonitor)
+
+    m.MSignal = make(chan os.Signal, 1)
+    signal.Notify(m.MSignal, os.Interrupt)
+
+    go func(c chan os.Signal){
+    	for i := 0; i < 2; i++{
+    		s := <-c
+    		fmt.Println("Got signal:", s)
+    	}
+    	os.Exit(0)
+    }(m.MSignal)
+
     return m
 }
 
@@ -37,7 +52,7 @@ func (self *Monitor) AddCoin(l lCommon.ListMonitor)(err error){
 	if l.UpPerPercent == 0 		{ l.UpPerPercent = 0.03 }
 	if l.DownPerPercent == 0 	{ l.DownPerPercent = 0.03 }	
 
-
+	
 
 	if l.UpLine == 0 			{ l.UpLine = 99999.99 }	
 	if l.DownLine == 0 			{ l.DownLine = 0.0 }	

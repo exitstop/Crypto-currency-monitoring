@@ -15,7 +15,8 @@ type ListMonitor struct{
 	Coin string
 	Exchange string
 	Price float64
-	PriceLast float64
+	PriceLast float64	
+	// EntryPrice float64
 	PriceLastTick float64
 	Time int
 	UpPerPercent float64

@@ -83,14 +83,16 @@ func Line(l lCommon.ListMonitor, Btcusdt float64, c []string) string {
 	exchange_	:= fmt.Sprintf("%10s", l.Exchange)
 	coin_		:= fmt.Sprintf("%10s", l.Coin)
 	l.Hodl 		= l.Hodl * l.Price
-	l.HodlUsd   = l.Hodl * Btcusdt
+	if (l.HodlUsd != -1){	
+		l.HodlUsd   = l.Hodl * Btcusdt 
+	}
 	price_		:= GBlock(l.Price);		if l.Price == 0.0 								{ c[3]="hidden"; }
 	upPer_		:= GBlock(l.UpPer);		if l.UpPer == 99999.99	|| l.UpPerPercent == 1	{ c[4]="hidden"; }
 	downPer_	:= GBlock(l.DownPer);	if l.DownPer == 0.0 || l.DownPerPercent == 1	{ c[5]="hidden"; } 
 	upLine_		:= GBlock(l.UpLine);	if l.UpLine == 99999.99							{ c[6]="hidden"; }  
 	downLine_	:= GBlock(l.DownLine);	if l.DownLine == 0								{ c[7]="hidden"; } 
 	hodl_		:= GBlock(l.Hodl);		if l.Hodl == 0.0								{ c[8]="hidden"; }
-	hodlUsd_	:= GBlock(l.HodlUsd);	if l.HodlUsd == 0.0								{ c[9]="hidden"; }
+	hodlUsd_	:= GBlock(l.HodlUsd);	if l.HodlUsd <= 0.0								{ c[9]="hidden"; }
 
 	return (Cl(index_, c[0]) + " " +Cl(exchange_,c[1]) + " " +Cl(coin_,c[2]) + " " +Cl(price_,c[3]) + " " +
 		Cl(upPer_,c[4]) + " " +Cl(downPer_,c[5]) + " " + 	
