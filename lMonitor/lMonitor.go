@@ -16,6 +16,7 @@ import (
 	// "../lCn"
 	"os"
 	"os/signal"
+	"encoding/json"
     )
 
 
@@ -38,16 +39,22 @@ func NewMonitor() *Monitor {
     m.MSignal = make(chan os.Signal, 1)
     signal.Notify(m.MSignal, os.Interrupt)
 
-    go func(c chan os.Signal){
+    go func(c chan os.Signal, m *Monitor){
     	for i := 0; i < 1; i++{
     		s := <-c
     		fmt.Println("Got signal:", s)
+
+    		b, _ := json.Marshal(m.dbJson)
+    		lJsonLog.WriteJson(b)
     	}
     	os.Exit(0)
-    }(m.MSignal)
+    }(m.MSignal, m)    
 
-    m.dbJson = lJsonLog.ReadJson();
-
+    var err error 
+    m.dbJson, err = lJsonLog.ReadJson();
+    if err != nil {
+    	fmt.Println("Not found dat1")
+    }
     return m
 }
 

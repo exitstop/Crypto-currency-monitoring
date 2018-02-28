@@ -17,16 +17,15 @@ func check(e error) {
     }
 }
 
-func WriteJson(b []byte){
+func WriteJson(b []byte) error{
     err := ioutil.WriteFile("dat1", b, 0644)
-    check(err)
+    return err
 }
 
-func ReadJson() map[string]interface{} {
+func ReadJson() (map[string]interface{}, error) {
     var ret map[string]interface{} 
     dat, err := ioutil.ReadFile("dat1")
-    json.Unmarshal(dat, &ret) 
-    check(err)    
-    return ret
+    json.Unmarshal(dat, &ret)   
+    return ret, err
 }
 
