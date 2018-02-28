@@ -11,6 +11,7 @@ import (
 	"../lText"
 	"runtime"
 	"../lCommon"
+	"../lJsonLog"
 	// "sync"
 	// "../lCn"
 	"os"
@@ -26,6 +27,7 @@ type Monitor struct {
 	listError 		[]string
 	Btcusdt float64
 	MSignal chan os.Signal
+	dbJson map[string]interface{}
 }
 
 
@@ -37,12 +39,14 @@ func NewMonitor() *Monitor {
     signal.Notify(m.MSignal, os.Interrupt)
 
     go func(c chan os.Signal){
-    	for i := 0; i < 2; i++{
+    	for i := 0; i < 1; i++{
     		s := <-c
     		fmt.Println("Got signal:", s)
     	}
     	os.Exit(0)
     }(m.MSignal)
+
+    m.dbJson = lJsonLog.ReadJson();
 
     return m
 }
@@ -52,7 +56,7 @@ func (self *Monitor) AddCoin(l lCommon.ListMonitor)(err error){
 	if l.UpPerPercent == 0 		{ l.UpPerPercent = 0.03 }
 	if l.DownPerPercent == 0 	{ l.DownPerPercent = 0.03 }	
 
-	
+	if (l.Coin == "BTCUSDT")	{ l.HodlUsd = -1 }
 
 	if l.UpLine == 0 			{ l.UpLine = 99999.99 }	
 	if l.DownLine == 0 			{ l.DownLine = 0.0 }	

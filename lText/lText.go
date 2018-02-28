@@ -82,8 +82,11 @@ func Line(l lCommon.ListMonitor, Btcusdt float64, c []string) string {
 	index_ 		:= fmt.Sprintf("%3d", l.Index)
 	exchange_	:= fmt.Sprintf("%10s", l.Exchange)
 	coin_		:= fmt.Sprintf("%10s", l.Coin)
-	l.Hodl 		= l.Hodl * l.Price
+	// l.Hodl 		= l.Hodl * l.Price
 	if (l.HodlUsd != -1){	
+		l.Hodl 	= l.Hodl * l.Price
+		l.HodlUsd   = l.Hodl * Btcusdt 
+	}else{
 		l.HodlUsd   = l.Hodl * Btcusdt 
 	}
 	price_		:= GBlock(l.Price);		if l.Price == 0.0 								{ c[3]="hidden"; }
