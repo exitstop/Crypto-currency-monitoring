@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"github.com/hajimehoshi/oto"
 	"github.com/hajimehoshi/go-mp3"
-	"strconv"
-    "time"
+	// "strconv"
+    // "time"
 )
 
 
@@ -18,6 +18,7 @@ type ListMonitor struct{
 	Exchange string
 	Price float64
 	PriceLast float64	
+	LogSavePrice float64	
 	// EntryPrice float64
 	PriceLastTick float64
 	Time int
@@ -86,7 +87,3 @@ func PlayMusic(path string, div int64) error {
 }
 
 
-
-func Timestamp() (string) {
-    return strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
-}

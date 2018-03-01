@@ -8,7 +8,10 @@ import (
     // "fmt"
     "io/ioutil"
     "encoding/json"
+    // "../lCommon"
     // "os"
+    "strconv"
+    "time"
 )
 
 func check(e error) {
@@ -29,3 +32,6 @@ func ReadJson() (map[string]interface{}, error) {
     return ret, err
 }
 
+func Timestamp() (string) {
+    return strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+}

@@ -60,6 +60,10 @@ func GBlock(number float64) string {
 	tF := fmt.Sprintf("%c.%df", '%', floatBlockSize - NullCount(number))
 	return fmt.Sprintf(tF, number)
 }
+func GBlockI(number float64, i int) string {
+	tF := fmt.Sprintf("%c.%df", '%', i)
+	return fmt.Sprintf(tF, number)
+}
 
 // func Line(index int, exchange string, coin string, price float64, upPer float64, downPer float64, upLine float64, downLine float64, hodl float64, c []string ) string {
 // 	index_ 		:= fmt.Sprintf("%.3d", index)
@@ -89,16 +93,22 @@ func Line(l lCommon.ListMonitor, Btcusdt float64, c []string) string {
 	}else{
 		l.HodlUsd   = l.Hodl * Btcusdt 
 	}
-	price_		:= GBlock(l.Price);		if l.Price == 0.0 								{ c[3]="hidden"; }
-	upPer_		:= GBlock(l.UpPer);		if l.UpPer == 99999.99	|| l.UpPerPercent == 1	{ c[4]="hidden"; }
-	downPer_	:= GBlock(l.DownPer);	if l.DownPer == 0.0 || l.DownPerPercent == 1	{ c[5]="hidden"; } 
-	upLine_		:= GBlock(l.UpLine);	if l.UpLine == 99999.99							{ c[6]="hidden"; }  
-	downLine_	:= GBlock(l.DownLine);	if l.DownLine == 0								{ c[7]="hidden"; } 
-	hodl_		:= GBlock(l.Hodl);		if l.Hodl == 0.0								{ c[8]="hidden"; }
-	hodlUsd_	:= GBlock(l.HodlUsd);	if l.HodlUsd <= 0.0								{ c[9]="hidden"; }
+
+	procentLogSave := 100* l.Price/l.LogSavePrice - 100
+
+	price_			:= GBlock(l.Price);			if l.Price == 0.0 								{ c[3]="hidden"; }
+	upPer_			:= GBlock(l.UpPer);			if l.UpPer == 99999.99	|| l.UpPerPercent == 1	{ c[4]="hidden"; }
+	downPer_		:= GBlock(l.DownPer);		if l.DownPer == 0.0 || l.DownPerPercent == 1	{ c[5]="hidden"; } 
+	upLine_			:= GBlock(l.UpLine);		if l.UpLine == 99999.99							{ c[6]="hidden"; }  
+	downLine_		:= GBlock(l.DownLine);		if l.DownLine == 0								{ c[7]="hidden"; } 
+	LogSavePrice_	:= GBlockI(procentLogSave,2);	if l.LogSavePrice == 0.0 						{ c[8]="hidden"; }else if (procentLogSave > 0) { c[8]="green";  }else if (procentLogSave < 0) { c[8]="red";  }
+	hodl_			:= GBlock(l.Hodl);			if l.Hodl == 0.0								{ c[9]="hidden"; }
+	hodlUsd_		:= GBlock(l.HodlUsd);		if l.HodlUsd <= 0.0								{ c[10]="hidden"; }
+
 
 	return (Cl(index_, c[0]) + " " +Cl(exchange_,c[1]) + " " +Cl(coin_,c[2]) + " " +Cl(price_,c[3]) + " " +
 		Cl(upPer_,c[4]) + " " +Cl(downPer_,c[5]) + " " + 	
 		Cl(upLine_,c[6]) + " " +Cl(downLine_,c[7]) + " " + 
-		Cl(hodl_,c[8])+ " " + Cl(hodlUsd_,c[9]) + "\n")
+		Cl(LogSavePrice_,c[8]) + " " +
+		Cl(hodl_,c[9])+ " " + Cl(hodlUsd_,c[10]) + "\n")
 }

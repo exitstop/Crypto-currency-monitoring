@@ -44,19 +44,22 @@ func NewMonitor() *Monitor {
     		s := <-c
     		fmt.Println("Got signal:", s)
 
-    		b, _ := json.Marshal(m.dbJson)
-    		lJsonLog.WriteJson(b)
+    		// b, _ := json.Marshal(m.dbJson)
+    		// lJsonLog.WriteJson(b)
     	}
     	os.Exit(0)
     }(m.MSignal, m)    
 
-    var err error 
-    m.dbJson, err = lJsonLog.ReadJson();
-    if err != nil {
-    	fmt.Println("Not found dat1")
-    	m.dbJson = make(map[string]interface{})
-    	m.dbJson["statistics"] = 555
-    }
+    // var err error 
+    // m.dbJson, err = lJsonLog.ReadJson();
+    // if err != nil {
+    // 	fmt.Println("Not found dat1")
+    // 	m.dbJson = make(map[string]interface{})
+    // 	m.dbJson["statistics"] = 555
+
+    // 	b, _ := json.Marshal(m.dbJson)
+    // 	lJsonLog.WriteJson(b)
+    // }
     return m
 }
 
@@ -104,6 +107,9 @@ func (self *Monitor) GetPrice()(err error){
 		m := <-c
 		self.ListTaskSync[m.Index] = &m
 	}
+
+	self.LogSave()
+
 	return nil
 }
 
@@ -148,7 +154,7 @@ func (self *Monitor) soundAllert(soundFlagUp int, soundFlagDown int){
 }
 
 func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int)([]string){
-	var timeLimit = 180
+	var timeLimit = 130
 	if self.ListTaskSync[i].PriceLast == 0{
 		self.ListTaskSync[i].Time = timeLimit
 		self.ListTaskSync[i].PriceLast = self.ListTaskSync[i].Price
@@ -169,24 +175,61 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 		}	
 	}
 
-	color := []string{"white","white","white","white","white","white","white","white","white","white"}
+	color := []string{"white","white","white","white","white","white","white","white","white","white","white"}
 
 	if( self.ListTaskSync[i].Coin == "BTCUSDT") { self.Btcusdt = self.ListTaskSync[i].Price }
 
 	if( self.ListTaskSync[i].Price != 0){
 		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].PriceLastTick){
-			color = []string{"white","white","white","green","white","white","white","white","white","white"}			
+			color = []string{"white","white","white","green","white","white","white","white","white","white","white"}			
 		}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].PriceLastTick) {
-			color = []string{"white","white","white","red","white","white","white","white","white","white"}
+			color = []string{"white","white","white","red","white","white","white","white","white","white","white"}
 		}
 
 		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
-			color = []string{"white","white","green","green","green","white","white","white","white","white"}			
+			color = []string{"white","white","green","green","green","white","white","white","white","white","white"}			
 			*soundFlagUp = 1
 		}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer || self.ListTaskSync[i].Price < self.ListTaskSync[i].DownLine) {
-			color = []string{"white","white","red","red","red","white","white","white","white","white"}
+			color = []string{"white","white","red","red","red","white","white","white","white","white","white"}
 			*soundFlagDown = -1
 		}
 	}
 	return color
+}
+
+
+func (self *Monitor) LogSave(){
+	if _, ok := self.dbJson["statistics"]; !ok{
+		fmt.Println("LogSave()")
+		var err error 
+		self.dbJson, err = lJsonLog.ReadJson();
+		if err != nil {
+			fmt.Println("Not found dat1")
+			self.dbJson = make(map[string]interface{})
+			self.dbJson["statistics"] = make(map[string]*interface{})
+    		a := make(map[string]interface{})
+
+    		for i:=0 ; i < len(self.ListTaskSync); i++ {
+    			a[self.listTask[i].Coin] = self.ListTaskSync[i].Price
+    		}
+
+    		self.dbJson["statistics"] = a	
+
+			b, _ := json.Marshal(self.dbJson)
+			lJsonLog.WriteJson(b)
+		}
+	}else{
+		for i:=0 ; i < len(self.ListTaskSync); i++ {
+
+    		if mp, ok := self.dbJson["statistics"].(map[string]interface{}); ok{
+    			if ( self.listTask[self.ListTaskSync[i].Index].LogSavePrice == 0) {
+    				self.ListTaskSync[i].LogSavePrice = mp[self.listTask[i].Coin].(float64)
+    			}else{
+    				self.ListTaskSync[i].LogSavePrice = self.listTask[self.ListTaskSync[i].Index].LogSavePrice
+    			}
+    		}else{
+    			// return 	nil, errors.New(nameFunction + "() Not found key dbJson['statistics']")
+    		}
+    	}
+	}
 }
