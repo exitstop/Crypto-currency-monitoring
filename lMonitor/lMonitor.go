@@ -117,6 +117,11 @@ func (self *Monitor) Print()(err error){
 
 	var soundFlagDown = 0
 	var soundFlagUp = 0
+
+	formatLine := fmt.Sprintf("%3s %10s %10s %10s %10s %10s %10s %10s %3c %10s %10s\n", "№", "Exchange", "Coin", "Price", "Up", "Down", "ManUp", "ManDown", '%', "hodl", "USDT")
+	lText.ClPrint(formatLine, "yellow")
+	// fmt.Println(formatLine)
+
 	for i:=0 ; i < len(self.ListTaskSync); i++ {		
 
 		color := self.priceComparison(&soundFlagUp, &soundFlagDown, i)

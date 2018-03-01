@@ -25,7 +25,7 @@ func main() {
 
 	monitor := lMonitor.NewMonitor()
 
-	monitor.AddCoin(lCommon.ListMonitor{Coin: "BTCUSDT", Exchange: "binance", Price: 0.02, UpPerPercent: 0.02, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0.03338340, HodlUsd: -1, CallBack: lCn.GetPriceBinance})
+	monitor.AddCoin(lCommon.ListMonitor{Coin: "BTCUSDT", Exchange: "binance", Price: 0.02, LogSavePrice:10246, UpPerPercent: 0.02, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0.03108776, HodlUsd: -1, CallBack: lCn.GetPriceBinance})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ETHUSDT", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "ETCBTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "LTCUSDT", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
@@ -34,7 +34,7 @@ func main() {
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "AIONBTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "ADABTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ELFBTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
-  monitor.AddCoin(lCommon.ListMonitor{Coin: "NCASHBTC", Exchange: "binance", Price: 0.13, UpPerPercent: 0.13, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
+  monitor.AddCoin(lCommon.ListMonitor{Coin: "NCASHBTC", Exchange: "binance", Price: 0.13, LogSavePrice:0.00000271,UpPerPercent: 0.13, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "QSPBTC", Exchange: "binance", Price: 0.1, UpPerPercent: 0.1, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "KNCBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "BCDBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceBinance})
@@ -56,7 +56,7 @@ func main() {
   monitor.AddCoin(lCommon.ListMonitor{Coin: "nas_usdt", Exchange: "gate", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceGate})
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "DPY_usdt", Exchange: "gate", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceGate})
 
-  monitor.AddCoin(lCommon.ListMonitor{Coin: "CEFS_USDT", Exchange: "cryptopia", Price: 0, UpPerPercent: 0.05, DownPerPercent: 0.05, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceCryptopia})
+  monitor.AddCoin(lCommon.ListMonitor{Coin: "CEFS_USDT", Exchange: "cryptopia", Price: 0, LogSavePrice: 1516, UpPerPercent: 0.05, DownPerPercent: 0.05, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceCryptopia})
 	monitor.AddCoin(lCommon.ListMonitor{Coin: "EVR_BTC", Exchange: "cryptopia", Price: 0, UpPerPercent: 0.2, DownPerPercent: 0.4, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0, CallBack: lCn.GetPriceCryptopia})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "HOLD_BTC", Exchange: "cryptopia", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0.00000570, DownLine: 0, Hodl: 56925.80102849, LogSavePrice: 0.00000570, CallBack: lCn.GetPriceCryptopia})
 
