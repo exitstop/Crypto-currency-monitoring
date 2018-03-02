@@ -238,3 +238,12 @@ func (self *Monitor) LogSave(){
     	}
 	}
 }
+
+func (self *Monitor) Clear(){
+	if err := lCommon.PlayMusic("./sound/obj_belltower.mp3", 2 ) ; err != nil {
+		// self.listError = append(self.listError, err.Error() )
+	}
+	for i:=0 ; i < len(self.ListTaskSync); i++ {
+		self.ListTaskSync[i].Time = 0
+	}
+}
