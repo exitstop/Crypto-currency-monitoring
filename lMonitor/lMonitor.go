@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"../lCommon"
 	"../lJsonLog"
+	// "../lSumbols"
 	// "sync"
 	// "../lCn"
 	"os"
@@ -82,13 +83,13 @@ func (self *Monitor) GetPrice()(err error){
 	c := make(chan lCommon.ListMonitor)
 	for _, element := range self.listTask {
 		go func(element lCommon.ListMonitor, c chan lCommon.ListMonitor) {
-				// defer waitGroup.Done()
+
 		        json, err := element.CallBack(element.Coin)
-		        // json, err := element.CallBack(element.Coin)
+		        // json, err := lSumbols.GetListSumbolsKucoin()
+
 		        if err != nil{
 		          _, file, line, _ := runtime.Caller(0)
 		          self.listError = append(self.listError, "error: GetPrice file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n" + err.Error() + "\n")
-		          // lText.ClPrint("error: GetPrice file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n" + err.Error() + "\n", "red")
 		          element.Price = 0
 		          c <- element
 		        }else{
@@ -98,11 +99,12 @@ func (self *Monitor) GetPrice()(err error){
 		        		element.Price = 0
 		        	}
 		        	c <- element
-		        	// element.Price =  json["lastDealPrice"].(float64)
-		        	// fmt.Println( fmt.Sprintf ( "%.8f",  element.Price ) )
 		        }		        
 		    } (element, c);		
-	}	
+	}
+
+	
+
 	for range self.listTask {
 		m := <-c
 		self.ListTaskSync[m.Index] = &m
