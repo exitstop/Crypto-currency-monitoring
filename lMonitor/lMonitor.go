@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"../lCommon"
 	"../lJsonLog"
-	// "../lSumbols"
+	"../lSymbols"
 	// "sync"
 	// "../lCn"
 	"os"
@@ -79,36 +79,81 @@ func (self *Monitor) AddCoin(l lCommon.ListMonitor)(err error){
 	return nil	
 }
 
-func (self *Monitor) GetPrice()(err error){
-	c := make(chan lCommon.ListMonitor)
-	for _, element := range self.listTask {
-		go func(element lCommon.ListMonitor, c chan lCommon.ListMonitor) {
+type StructItemReturn struct {
+	ExchangeName string
+	Data map[string]lSymbols.ListSymbolContent
+	CallBack func()(map[string]lSymbols.ListSymbolContent, error)
+}
 
-		        json, err := element.CallBack(element.Coin)
-		        // json, err := lSumbols.GetListSumbolsKucoin()
+func (self *Monitor) GetPrice()(err error){
+	c := make(chan StructItemReturn)
+
+
+
+	var exch []StructItemReturn
+	exch = append(exch, StructItemReturn{ExchangeName: "binance", CallBack: lSymbols.GetListSumbolsBinance })
+	exch = append(exch, StructItemReturn{ExchangeName: "kucoin", CallBack: lSymbols.GetListSumbolsKucoin  })
+
+
+	for _, iNameExch := range exch {
+		go func(iNameExch StructItemReturn, c chan StructItemReturn) {
+		        json, err := iNameExch.CallBack()
 
 		        if err != nil{
 		          _, file, line, _ := runtime.Caller(0)
 		          self.listError = append(self.listError, "error: GetPrice file: " + string(file) + " line: " + fmt.Sprintf("%d", line) + "\n" + err.Error() + "\n")
-		          element.Price = 0
-		          c <- element
+
 		        }else{
-		        	if mp, ok := json["lastDealPrice"].(float64); ok{
-		        		element.Price = mp
-		        	}else{
-		        		element.Price = 0
-		        	}
-		        	c <- element
+		        	iNameExch.Data = json
+		        	c <- iNameExch
 		        }		        
-		    } (element, c);		
+		    } (iNameExch, c);		
 	}
 
-	
+	mListEchange := make(map[string]map[string]lSymbols.ListSymbolContent)
 
-	for range self.listTask {
-		m := <-c
-		self.ListTaskSync[m.Index] = &m
+
+	for range exch {
+		d := <-c
+		mListEchange[d.ExchangeName] = d.Data		
 	}
+
+	for _, item := range self.listTask {
+		aa := mListEchange[item.Exchange]	
+		item.Price = aa[item.Coin].Price
+		item.Visible = true
+		m := item
+		self.ListTaskSync[item.Index] = &m
+	}
+	// for _, item := range self.listTask {
+	// 	aa := mListEchange[item.Exchange]	
+	// 	aa[item.Coin].Visible = true
+	// 	aa[item.Coin].Index = item.Index
+	// }
+	// var gIndex int = 0
+	// for index, item := range self.listTask {
+	// 	aa := mListEchange[item.Exchange]	
+	// 	item.Price = aa[item.Coin].Price
+	// 	item.Visible = true
+	// 	m := item
+	// 	self.ListTaskSync[item.Index] = &m
+	// 	gIndex = index
+	// }
+
+	// for _, itEch := range mListEchange {
+	// 	for _, item := range itEch {
+	// 		for _, coinIt := range item {
+	// 			if( coinIt.Visible == false ){				
+	// 				gIndex = gIndex + 1
+	// 				var m coinIt lCommon.ListMonitor{  Coin : coinIt.SymbolDual, Echange : coinIt.Echange, Price : 0, UpPerPercent : 0, 
+	// 													DownPerPercent : 0, UpPer : 0, DownPer : 0, UpLine : 0, DownLine : 0, Hodl : 0}
+
+	// 				self.ListTaskSync[gIndex] = &m
+	// 			}
+	// 		}
+	// 	}
+	// }
+
 
 	self.LogSave()
 
@@ -130,7 +175,9 @@ func (self *Monitor) Print()(err error){
 
 		self.listTask[i] = *self.ListTaskSync[i]
 
-		lText.Print( lText.Line(*self.ListTaskSync[i], self.Btcusdt, color ) )		
+		if( self.ListTaskSync[i].Visible == true ){
+			lText.Print( lText.Line(*self.ListTaskSync[i], self.Btcusdt, color ) )	
+		}	
 	}
 	self.soundAllert(soundFlagUp, soundFlagDown)
 

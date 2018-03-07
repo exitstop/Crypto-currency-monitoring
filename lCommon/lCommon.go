@@ -30,6 +30,7 @@ type ListMonitor struct{
 	DownLine float64
 	Hodl float64
 	HodlUsd float64
+	Visible bool
 	CallBack func(string)(map[string]interface{}, error)
 }
 
