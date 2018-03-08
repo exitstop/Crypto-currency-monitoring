@@ -177,3 +177,31 @@ func GetListSumbolsBitfinex()  ( map[string]ListSymbolContent, error) {
 
 }
 
+
+
+
+func GetListSumbolsCryptopia()  ( map[string]ListSymbolContent, error) {
+	nameFunction := "GetListSumbolsCryptopia"
+	retMapt := make(map[string]ListSymbolContent)
+	resp, err := http.Get("https://www.cryptopia.co.nz/api/GetMarkets" )
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
+	json, err := Connect(resp)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
+
+	if mp, ok := json["Data"].([]interface{}); ok{
+		for _,item := range mp {
+			item := item.(map[string]interface{})
+
+			name := item["Label"].(string)
+			subIt := ListSymbolContent{	SymbolDual 	 : 		name, 
+										Price 		 : 		TakeFloat(item, "LastPrice"), 
+										Visible	 	 : 		false}			
+
+			retMapt[name] = subIt
+		}
+		return 	retMapt, nil
+	}else{
+		return 	nil, errors.New(nameFunction + "() Not found key json['result']")
+	}
+
+}

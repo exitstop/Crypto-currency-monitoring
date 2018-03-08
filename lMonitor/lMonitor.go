@@ -98,6 +98,7 @@ func (self *Monitor) GetPrice()(err error){
 
 
 	var exch []StructItemReturn
+	exch = append(exch, StructItemReturn{ExchangeName: "cryptopia", CallBack: lSymbols.GetListSumbolsCryptopia  })
 	exch = append(exch, StructItemReturn{ExchangeName: "bittrex", CallBack: lSymbols.GetListSumbolsBittrex  })
 	exch = append(exch, StructItemReturn{ExchangeName: "binance", CallBack: lSymbols.GetListSumbolsBinance })
 	exch = append(exch, StructItemReturn{ExchangeName: "kucoin", CallBack: lSymbols.GetListSumbolsKucoin  })
@@ -155,11 +156,19 @@ func (self *Monitor) GetPrice()(err error){
 						}
 						self.ListTaskSyncStr[str] = m
 					}else{
-						pecentUp_ := 0.08
+						pecentUp_ := 0.09
 						pecentDwon_ := 0.15
-						if ( index1 == "bittrex" || index1 == "binance" ){
+						if ( index1 == "bittrex"){
 							pecentUp_ = 0.03
-							pecentDwon_ = 0.06
+							pecentDwon_ = 0.15
+						}
+						if (  index1 == "binance" ){
+							pecentUp_ = 0.03
+							pecentDwon_ = 0.15
+						}
+						if (  index1 == "cryptopia" ){
+							pecentUp_ = 0.3
+							pecentDwon_ = 0.3
 						}
 						m := lCommon.ListMonitor{  Index: gIndex, Coin : coinIt.SymbolDual, Exchange : index1, Price : coinIt.Price, UpPerPercent : pecentUp_, 
 														DownPerPercent : pecentDwon_, UpPer : 0, DownPer : 0, UpLine : 99999.99, DownLine : 0, Hodl : 0, Visible: false}
@@ -280,14 +289,16 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 			// self.ListTaskSync[i].SoundOn = true	
 		}
 
-		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
-			color = []string{"white","white","green","green","green","white","white","white","white","white","white"}	
-			self.ListTaskSync[i].SoundOn = true			
-			*soundFlagUp = 1
-		}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer || self.ListTaskSync[i].Price < self.ListTaskSync[i].DownLine) {
-			color = []string{"white","white","red","red","red","white","white","white","white","white","white"}
-			self.ListTaskSync[i].SoundOn = true	
-			*soundFlagDown = -1
+		if( self.ListTaskSync[i].Price < 80000.000){
+			if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
+				color = []string{"white","white","green","green","green","white","white","white","white","white","white"}	
+				self.ListTaskSync[i].SoundOn = true			
+				*soundFlagUp = 1
+			}else if (self.ListTaskSync[i].Price < self.ListTaskSync[i].DownPer || self.ListTaskSync[i].Price < self.ListTaskSync[i].DownLine) {
+				color = []string{"white","white","red","red","red","white","white","white","white","white","white"}
+				self.ListTaskSync[i].SoundOn = true	
+				*soundFlagDown = -1
+			}
 		}
 
 	}
