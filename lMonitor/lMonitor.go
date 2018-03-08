@@ -156,19 +156,31 @@ func (self *Monitor) GetPrice()(err error){
 						}
 						self.ListTaskSyncStr[str] = m
 					}else{
-						pecentUp_ := 0.09
-						pecentDwon_ := 0.15
-						if ( index1 == "bittrex"){
-							pecentUp_ = 0.03
-							pecentDwon_ = 0.15
-						}
-						if (  index1 == "binance" ){
-							pecentUp_ = 0.03
-							pecentDwon_ = 0.15
-						}
-						if (  index1 == "cryptopia" ){
-							pecentUp_ = 0.3
-							pecentDwon_ = 0.3
+							pecentUp_ := 0.09
+							pecentDwon_ := 0.15
+							
+						if(mp.Visible == false){
+							
+							if ( index1 == "kucoin"){
+								pecentUp_ = 0.12
+								pecentDwon_ = 0.25
+							}
+							if ( index1 == "bittrex"){
+								pecentUp_ = 0.08
+								pecentDwon_ = 0.20
+							}
+							if (  index1 == "binance" ){
+								pecentUp_ = 0.05
+								pecentDwon_ = 0.15
+							}
+							if (  index1 == "cryptopia" ){
+								pecentUp_ = 0.6
+								pecentDwon_ = 0.7
+							}
+							if (  index1 == "gate" ){
+								pecentUp_ = 0.4
+								pecentDwon_ = 0.4
+							}
 						}
 						m := lCommon.ListMonitor{  Index: gIndex, Coin : coinIt.SymbolDual, Exchange : index1, Price : coinIt.Price, UpPerPercent : pecentUp_, 
 														DownPerPercent : pecentDwon_, UpPer : 0, DownPer : 0, UpLine : 99999.99, DownLine : 0, Hodl : 0, Visible: false}
@@ -289,8 +301,8 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 			// self.ListTaskSync[i].SoundOn = true	
 		}
 
-		if( self.ListTaskSync[i].Price < 80000.000){
-			if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
+		if( self.ListTaskSync[i].Price < 80000.000 || self.ListTaskSync[i].Price > 0.00000099){
+			if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer && self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
 				color = []string{"white","white","green","green","green","white","white","white","white","white","white"}	
 				self.ListTaskSync[i].SoundOn = true			
 				*soundFlagUp = 1
