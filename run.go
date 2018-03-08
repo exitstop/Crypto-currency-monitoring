@@ -94,9 +94,10 @@ func main() {
  //  monitor.AddCoin(lCommon.ListMonitor{Coin: "HOLD_BTC", Exchange: "cryptopia", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0.00000570, DownLine: 0, Hodl: 56925.80102849, LogSavePrice: 0.00000570, CallBack: lCn.GetPriceCryptopia})
 
 	for {
-    
-		monitor.GetPrice()
-		lCommon.CallClear()
+
+		// lCommon.CallClear()
+    monitor.GetPrice()
+    lCommon.CallClear()
 		monitor.Print()
 
     resp, err := http.Get("https://www.google.ru" )
@@ -107,7 +108,7 @@ func main() {
     }
     resp.Body.Close()
 
-		time.Sleep(4 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 
 	return

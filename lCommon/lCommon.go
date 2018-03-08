@@ -31,6 +31,7 @@ type ListMonitor struct{
 	Hodl float64
 	HodlUsd float64
 	Visible bool
+	SoundOn bool
 	CallBack func(string)(map[string]interface{}, error)
 }
 
