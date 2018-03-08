@@ -83,7 +83,7 @@ func GBlockI(number float64, i int) string {
 
 func Line(l lCommon.ListMonitor, Btcusdt float64, c []string) string {
 	if l.Price == 0 { for i,_ := range c { c[i] = "magenta"} }
-	index_ 		:= fmt.Sprintf("%3d", l.Index)
+	index_ 		:= fmt.Sprintf("%4d", l.Index)
 	exchange_	:= fmt.Sprintf("%10s", l.Exchange)
 	coin_		:= fmt.Sprintf("%10s", l.Coin)
 	// l.Hodl 		= l.Hodl * l.Price

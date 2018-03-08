@@ -103,3 +103,77 @@ func GetListSumbolsBinance()  ( map[string]ListSymbolContent, error) {
 	return 	retMapt, nil
 }
 
+
+func GetListSumbolsGateIo()  ( map[string]ListSymbolContent, error) {
+	nameFunction := "GetListSumbolsGateIo"
+	retMapt := make(map[string]ListSymbolContent)
+	resp, err := http.Get("http://data.gate.io/api2/1/tickers" )
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
+	json, err := Connect(resp)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
+
+	for name,item := range json {
+		item := item.(map[string]interface{})
+		subIt := ListSymbolContent{  SymbolDual 	 : 	name, 
+									Price 		 : 		TakeFloat(item, "last"),
+									Visible	 	 : 		false}	
+		retMapt[name] = subIt
+		
+	}
+	return 	retMapt, nil
+}
+
+
+func GetListSumbolsBittrex()  ( map[string]ListSymbolContent, error) {
+	nameFunction := "GetListSumbolsBittrex"
+	retMapt := make(map[string]ListSymbolContent)
+	resp, err := http.Get("https://bittrex.com/api/v1.1/public/getmarketsummaries" )
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
+	json, err := Connect(resp)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
+
+	if mp, ok := json["result"].([]interface{}); ok{
+		for _,item := range mp {
+			item := item.(map[string]interface{})
+
+			name := item["MarketName"].(string)
+			subIt := ListSymbolContent{	SymbolDual 	 : 		name, 
+										Price 		 : 		TakeFloat(item, "Last"), 
+										Visible	 	 : 		false}			
+
+			retMapt[name] = subIt
+		}
+		return 	retMapt, nil
+	}else{
+		return 	nil, errors.New(nameFunction + "() Not found key json['result']")
+	}
+
+}
+
+
+func GetListSumbolsBitfinex()  ( map[string]ListSymbolContent, error) {
+	nameFunction := "GetListSumbolsBitfinex"
+	retMapt := make(map[string]ListSymbolContent)
+	resp, err := http.Get("https://api.bitfinex.com/v1/symbols_details" )
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
+	json, err := Connect(resp)
+	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
+
+	if mp, ok := json["result"].([]interface{}); ok{
+		for _,item := range mp {
+			item := item.(map[string]interface{})
+
+			name := item["MarketName"].(string)
+			subIt := ListSymbolContent{	SymbolDual 	 : 		name, 
+										Price 		 : 		TakeFloat(item, "Last"), 
+										Visible	 	 : 		false}			
+
+			retMapt[name] = subIt
+		}
+		return 	retMapt, nil
+	}else{
+		return 	nil, errors.New(nameFunction + "() Not found key json['result']")
+	}
+
+}
+

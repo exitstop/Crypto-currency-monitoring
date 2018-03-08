@@ -98,8 +98,11 @@ func (self *Monitor) GetPrice()(err error){
 
 
 	var exch []StructItemReturn
+	exch = append(exch, StructItemReturn{ExchangeName: "bittrex", CallBack: lSymbols.GetListSumbolsBittrex  })
 	exch = append(exch, StructItemReturn{ExchangeName: "binance", CallBack: lSymbols.GetListSumbolsBinance })
 	exch = append(exch, StructItemReturn{ExchangeName: "kucoin", CallBack: lSymbols.GetListSumbolsKucoin  })
+	exch = append(exch, StructItemReturn{ExchangeName: "gate", CallBack: lSymbols.GetListSumbolsGateIo  })
+
 
 
 	for _, iNameExch := range exch {
@@ -135,97 +138,52 @@ func (self *Monitor) GetPrice()(err error){
 		str := fmt.Sprintf("%s-%s",item.Exchange, item.Coin)
 		self.ListTaskSyncStr[str] = m
 	}
-	// for _, item := range self.listTask {
-	// 	aa := self.mListEchange[item.Exchange]	
-	// 	aa[item.Coin].Visible = true
-	// 	aa[item.Coin].Index = item.Index
-	// }
-	// var gIndex int = 0
-	// for index, item := range self.listTask {
-	// 	aa := self.mListEchange[item.Exchange]	
-	// 	item.Price = aa[item.Coin].Price
-	// 	item.Visible = true
-	// 	m := item
-	// 	self.ListTaskSync[item.Index] = &m
-	// 	gIndex = index
-	// }
+
 	gIndex := len(self.listTask)
-
-
-
-	// if ( len(self.ListTaskSyncHistory) == 0 ){
 		
-		for index1, itEch := range self.mListEchange {
-			for _, coinIt := range itEch {
-				//for _, coinIt := range item {
-					// if( coinIt.Visible != true ){				
-						
+	for index1, itEch := range self.mListEchange {
+		for _, coinIt := range itEch {
+					
+					str := fmt.Sprintf("%s-%s",index1, coinIt.SymbolDual)
 
-						// if ok, mp := self.ListTaskSyncHistory[i], ok{
+					if mp, ok := self.ListTaskSyncStr[str]; ok{
+						m := mp
+						m.Price = coinIt.Price
 
-						
-						str := fmt.Sprintf("%s-%s",index1, coinIt.SymbolDual)
-
-
-						
-						// aa := self.ListTaskSyncHistory[index1]
-
-						if mp, ok := self.ListTaskSyncStr[str]; ok{
-							m := mp
-							// m.Index = mp.Index
-							m.Price = coinIt.Price
-
-							if(mp.Visible == true){
-								m.Visible = true
-							}
-							self.ListTaskSyncStr[str] = m
-						}else{
-							m := lCommon.ListMonitor{  Index: gIndex, Coin : coinIt.SymbolDual, Exchange : index1, Price : coinIt.Price, UpPerPercent : 0.03, 
-															DownPerPercent : 0.03, UpPer : 0, DownPer : 0, UpLine : 99999.99, DownLine : 0, Hodl : 0, Visible: false}
-							self.ListTaskSyncStr[str] = m	
-							gIndex ++
-
+						if(mp.Visible == true){
+							m.Visible = true
 						}
-						// fmt.Println(gIndex)
-						
-						
-					// }
-				//}
-			}
+						self.ListTaskSyncStr[str] = m
+					}else{
+						pecentUp_ := 0.08
+						pecentDwon_ := 0.15
+						if ( index1 == "bittrex" || index1 == "binance" ){
+							pecentUp_ = 0.03
+							pecentDwon_ = 0.06
+						}
+						m := lCommon.ListMonitor{  Index: gIndex, Coin : coinIt.SymbolDual, Exchange : index1, Price : coinIt.Price, UpPerPercent : pecentUp_, 
+														DownPerPercent : pecentDwon_, UpPer : 0, DownPer : 0, UpLine : 99999.99, DownLine : 0, Hodl : 0, Visible: false}
+						self.ListTaskSyncStr[str] = m	
+						gIndex ++
+
+					}
+
 		}
+	}
 
-	// }
-
-	// for a, b := range self.ListTaskSyncStr{
-	// // for i:=0 ; i < len(self.ListTaskSync); i++ {
-	// 	fmt.Println(a, b)
-	// }
 
 
 	count := 0	
 	for _, b := range self.ListTaskSyncStr{
 		m := b		
 		self.ListTaskSync[m.Index] = &m
-		// 
 		count += m.Index
 	}
 
-	// for a, b := range self.ListTaskSyncStr{
-	// 	fmt.Println( a, self.ListTaskSync[b.Index].Price ) 
-
+	// fmt.Println(self.ListTaskSyncStr["bittrex-BTC-XEM"])
+	// for i:=0 ; i < len (self.ListTaskSync); i++ {
+	// 	println(self.ListTaskSync[i])
 	// }
-	
-	// for i:=0 ; i < len(self.ListTaskSyncStr); i++ {
-	// 	 count -= i
-	// }
-
-	// for a, b := range self.ListTaskSyncStr{
-	for i:=0 ; i < len(self.ListTaskSyncStr); i++ {
-		fmt.Println(self.ListTaskSync[i] , " ---- ")
-	}
-	fmt.Println( "count " , count )
-	fmt.Println( len(self.ListTaskSync), "---" , len(self.ListTaskSyncStr) )
-
 
 	self.LogSave()
 
@@ -237,18 +195,18 @@ func (self *Monitor) Print()(err error){
 	var soundFlagDown = 0
 	var soundFlagUp = 0
 
-	formatLine := fmt.Sprintf("%3s %10s %10s %10s %10s %10s %10s %10s %3c %10s %10s\n", "№", "Exchange", "Coin", "Price", "Up", "Down", "ManUp", "ManDown", '%', "hodl", "USDT")
+	formatLine := fmt.Sprintf("%4s %10s %10s %10s %10s %10s %10s %10s %3c %10s %10s\n", "№", "Exchange", "Coin", "Price", "Up", "Down", "ManUp", "ManDown", '%', "hodl", "USDT")
 	lText.ClPrint(formatLine, "yellow")
 	// fmt.Println("len: ",len(self.ListTaskSync))
 
-	for i:=0 ; i < len(self.ListTaskSync); i++ {	
-		// fmt.Println("i: ",i)
+	for i:=0 ; i < len(self.ListTaskSync); i++ {
+
+		
 		color := self.priceComparison(&soundFlagUp, &soundFlagDown, i)
 
 		str := fmt.Sprintf("%s-%s",self.ListTaskSync[i].Exchange, self.ListTaskSync[i].Coin)
 		m := *self.ListTaskSync[i]
 		self.ListTaskSyncStr[str] = m
-		// self.ListTaskSyncHistory[i] = &m
 
 		if( self.ListTaskSync[i].Visible == true || self.ListTaskSync[i].SoundOn == true	){
 			if( self.ListTaskSync[i].Visible == true ) { 
@@ -363,7 +321,7 @@ func (self *Monitor) LogSave(){
 
     		if mp, ok := self.dbJson["statistics"].(map[string]interface{}); ok{
     			if ( self.listTask[self.ListTaskSync[i].Index].LogSavePrice == 0) {
-    				self.ListTaskSync[i].LogSavePrice = mp[self.listTask[i].Coin].(float64)
+    				self.ListTaskSync[i].LogSavePrice = lSymbols.TakeFloat(mp, self.listTask[i].Coin) //mp[self.listTask[i].Coin].(float64)
     			}else{
     				self.ListTaskSync[i].LogSavePrice = self.listTask[self.ListTaskSync[i].Index].LogSavePrice
     			}
