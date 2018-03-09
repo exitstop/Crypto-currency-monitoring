@@ -154,7 +154,13 @@ func (self *Monitor) GetPrice()(err error){
 						if(mp.Visible == true){
 							m.Visible = true
 
+							a := self.listTask[mp.Index]
+							m.UpPerPercent = a.UpPerPercent
+							m.DownPerPercent = a.DownPerPercent
 
+							m.PriceLast = a.UpPer
+							m.PriceLast = a.DownPer
+							m.PriceLast = a.PriceLast
 
 						}
 						self.ListTaskSyncStr[str] = m
@@ -162,6 +168,12 @@ func (self *Monitor) GetPrice()(err error){
 							pecentUp_ := 0.09
 							pecentDwon_ := 0.15
 
+							UpPer_ := 0.0
+							DownPer_ := 0.0
+							PriceLast_ := 0.0
+
+
+						a := self.listTask[mp.Index]
 						if(mp.Visible == false){
 							
 							if ( index1 == "kucoin"){
@@ -184,13 +196,22 @@ func (self *Monitor) GetPrice()(err error){
 								pecentUp_ = 0.4
 								pecentDwon_ = 0.4
 							}
+
+
+
 						}else{
-							a := self.listTask[mp.Index]
+							
 							pecentUp_ = a.UpPerPercent
 							pecentDwon_ = a.DownPerPercent
+
 						}
+
+						UpPer_ = a.UpPer
+						DownPer_ = a.DownPer
+						PriceLast_ = a.PriceLast
+
 						m := lCommon.ListMonitor{  Index: gIndex, Coin : coinIt.SymbolDual, Exchange : index1, Price : coinIt.Price, UpPerPercent : pecentUp_, 
-														DownPerPercent : pecentDwon_, UpPer : 0, DownPer : 0, UpLine : 99999.99, DownLine : 0, Hodl : 0, Visible: false}
+														DownPerPercent : pecentDwon_, UpPer : UpPer_, DownPer : DownPer_, UpLine : 99999.99, DownLine : 0, Hodl : 0, Visible: false, PriceLast: PriceLast_}
 						self.ListTaskSyncStr[str] = m	
 						gIndex ++
 
@@ -310,6 +331,7 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 	if( self.ListTaskSync[i].Coin == "BTCUSDT") { self.Btcusdt = self.ListTaskSync[i].Price }
 
 	if( self.ListTaskSync[i].Price != 0){
+
 		if( self.ListTaskSync[i].Price > self.ListTaskSync[i].PriceLastTick){
 			color = []string{"white","white","white","green","white","white","white","white","white","white","white"}
 			// self.ListTaskSync[i].SoundOn = true	
@@ -318,8 +340,8 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 			// self.ListTaskSync[i].SoundOn = true	
 		}
 
-		if( self.ListTaskSync[i].Price < 80000.000 || self.ListTaskSync[i].Price > 0.00000099){
-			if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer && self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
+		if( self.ListTaskSync[i].Price < 80000.0  && self.ListTaskSync[i].Price > 0.00000099){
+			if( self.ListTaskSync[i].Price > self.ListTaskSync[i].UpPer  || self.ListTaskSync[i].Price > self.ListTaskSync[i].UpLine){
 				color = []string{"white","white","green","green","green","white","white","white","white","white","white"}	
 				self.ListTaskSync[i].SoundOn = true			
 				*soundFlagUp = 1
