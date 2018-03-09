@@ -153,12 +153,15 @@ func (self *Monitor) GetPrice()(err error){
 
 						if(mp.Visible == true){
 							m.Visible = true
+
+
+
 						}
 						self.ListTaskSyncStr[str] = m
 					}else{
 							pecentUp_ := 0.09
 							pecentDwon_ := 0.15
-							
+
 						if(mp.Visible == false){
 							
 							if ( index1 == "kucoin"){
@@ -181,6 +184,10 @@ func (self *Monitor) GetPrice()(err error){
 								pecentUp_ = 0.4
 								pecentDwon_ = 0.4
 							}
+						}else{
+							a := self.listTask[mp.Index]
+							pecentUp_ = a.UpPerPercent
+							pecentDwon_ = a.DownPerPercent
 						}
 						m := lCommon.ListMonitor{  Index: gIndex, Coin : coinIt.SymbolDual, Exchange : index1, Price : coinIt.Price, UpPerPercent : pecentUp_, 
 														DownPerPercent : pecentDwon_, UpPer : 0, DownPer : 0, UpLine : 99999.99, DownLine : 0, Hodl : 0, Visible: false}
@@ -196,7 +203,17 @@ func (self *Monitor) GetPrice()(err error){
 
 	count := 0	
 	for _, b := range self.ListTaskSyncStr{
-		m := b		
+		m := b	
+
+		// if(b.Index < len(self.ListTaskSync) ){
+		// 	a := self.ListTaskSync[b.Index]	
+		// 	if( a.Visible == true){
+		// 		m.Visible = true
+		// 		m.UpPerPercent = a.UpPerPercent
+		// 		m.DownPerPercent = a.DownPerPercent
+		// 	}
+		// }
+
 		self.ListTaskSync[m.Index] = &m
 		count += m.Index
 	}

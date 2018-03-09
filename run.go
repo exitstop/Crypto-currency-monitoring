@@ -49,12 +49,13 @@ func main() {
   //  }(monitor)
 
 
-  monitor.AddCoin(lCommon.ListMonitor{Coin: "BTCUSDT", Exchange: "binance", Price: 0.005, UpPerPercent: 0.005, DownPerPercent: 0.005, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0.15124802, HodlUsd: -1})
+  monitor.AddCoin(lCommon.ListMonitor{Coin: "BTCUSDT", Exchange: "binance", Price: 0.005, UpPerPercent: 0.001, DownPerPercent: 0.001, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0.15124802, HodlUsd: -1})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ETHUSDT", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ETCBTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "LTCUSDT", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "NEOUSDT", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
-  monitor.AddCoin(lCommon.ListMonitor{Coin: "LRCBTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 583.416})
+  monitor.AddCoin(lCommon.ListMonitor{Coin: "XRPBTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
+  monitor.AddCoin(lCommon.ListMonitor{Coin: "LRCBTC", Exchange: "binance", Price: 0, UpPerPercent: 0.3, DownPerPercent: 0.3, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 583.416})
   // monitor.AddCoin(lCommon.ListMonitor{Coin: "AIONBTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ADABTC", Exchange: "binance", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "TRXBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
@@ -69,7 +70,7 @@ func main() {
   monitor.AddCoin(lCommon.ListMonitor{Coin: "XLMBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "BQXBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ARNBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
-  monitor.AddCoin(lCommon.ListMonitor{Coin: "ONTBNB", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
+  // monitor.AddCoin(lCommon.ListMonitor{Coin: "ONTBNB", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "SUBBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "CNDBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   // monitor.AddCoin(lCommon.ListMonitor{Coin: "COBBTC", Exchange: "binance", Price: 0.06, UpPerPercent: 0.06, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
@@ -92,7 +93,7 @@ func main() {
   monitor.AddCoin(lCommon.ListMonitor{Coin: "dpy_usdt", Exchange: "gate", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
 
   monitor.AddCoin(lCommon.ListMonitor{Coin: "BTC-XEM", Exchange: "bittrex", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
-  monitor.AddCoin(lCommon.ListMonitor{Coin: "ETH-XEM", Exchange: "bittrex", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
+  // monitor.AddCoin(lCommon.ListMonitor{Coin: "ETH-XEM", Exchange: "bittrex", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "BTC-ENRG", Exchange: "bittrex", Price: 0, UpPerPercent: 0, DownPerPercent: 0, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
 
   monitor.AddCoin(lCommon.ListMonitor{Coin: "CEFS/USDT", Exchange: "cryptopia", Price: 0, UpPerPercent: 1, DownPerPercent: 1, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
