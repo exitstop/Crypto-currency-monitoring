@@ -38,7 +38,7 @@ func main() {
 
   monitor := lMonitor.NewMonitor()
 
-  monitor.AddCoin(lCommon.ListMonitor{Coin: "BTCUSDT", Exchange: "binance", Price: 0, LogSavePrice: 9409.0, UpPerPercent: 0.01, DownPerPercent: 0.01, UpPer: 0, DownPer: 0, UpLine: 8790, DownLine: 8420  , Hodl: 0.15124802, HodlUsd: -1})
+  monitor.AddCoin(lCommon.ListMonitor{Coin: "BTCUSDT", Exchange: "binance", Price: 0, LogSavePrice: 9409.0, UpPerPercent: 0.01, DownPerPercent: 0.01, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0  , Hodl: 0.15124802, HodlUsd: -1})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ETHUSDT", Exchange: "binance", Price: 0, UpPerPercent: 0.03, DownPerPercent: 0.03, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "ETCBTC", Exchange: "binance", Price: 0, UpPerPercent: 0.03, DownPerPercent: 0.03, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})
   monitor.AddCoin(lCommon.ListMonitor{Coin: "LTCUSDT", Exchange: "binance", Price: 0, UpPerPercent: 0.03, DownPerPercent: 0.03, UpPer: 0, DownPer: 0, UpLine: 0, DownLine: 0, Hodl: 0})

@@ -17,7 +17,6 @@ import (
 var ChanLog *chan string
 var numLog uint64
 
-
 type ListMonitor struct{
 	Index int
 	Coin string

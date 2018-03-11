@@ -9,6 +9,7 @@ import (
 	"errors"
 	"../lCommon"
 	"fmt"
+	"time"
  )
 
 
@@ -57,7 +58,13 @@ func GetListSumbolsKucoin()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSubolsKucoin"	
 	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
-	resp, err := http.Get("https://api.kucoin.com/v1/market/open/symbols" )
+
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+	    Timeout: timeout,
+	}
+
+	resp, err := client.Get("https://api.kucoin.com/v1/market/open/symbols" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
@@ -91,7 +98,12 @@ func GetListSumbolsBinance()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsBinance"
 	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
-	resp, err := http.Get("https://api.binance.com/api/v3/ticker/price" )
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+	    Timeout: timeout,
+	}
+
+	resp, err := client.Get("https://api.binance.com/api/v3/ticker/price" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect2(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
@@ -116,7 +128,12 @@ func GetListSumbolsGateIo()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsGateIo"
 	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
-	resp, err := http.Get("http://data.gate.io/api2/1/tickers" )
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+	    Timeout: timeout,
+	}
+
+	resp, err := client.Get("http://data.gate.io/api2/1/tickers" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
@@ -137,7 +154,12 @@ func GetListSumbolsBittrex()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsBittrex"
 	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
-	resp, err := http.Get("https://bittrex.com/api/v1.1/public/getmarketsummaries" )
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+	    Timeout: timeout,
+	}
+
+	resp, err := client.Get("https://bittrex.com/api/v1.1/public/getmarketsummaries" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
@@ -165,7 +187,12 @@ func GetListSumbolsBitfinex()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsBitfinex"
 	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
-	resp, err := http.Get("https://api.bitfinex.com/v1/symbols_details" )
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+	    Timeout: timeout,
+	}
+
+	resp, err := client.Get("https://api.bitfinex.com/v1/symbols_details" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
@@ -195,7 +222,12 @@ func GetListSumbolsCryptopia()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsCryptopia"
 	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
-	resp, err := http.Get("https://www.cryptopia.co.nz/api/GetMarkets" )
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+	    Timeout: timeout,
+	}
+
+	resp, err := client.Get("https://www.cryptopia.co.nz/api/GetMarkets" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
