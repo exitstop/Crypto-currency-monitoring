@@ -18,6 +18,7 @@ import (
 	"os"
 	"os/signal"
 	"encoding/json"
+	"time"
     )
 
 
@@ -37,6 +38,7 @@ type Monitor struct {
 
 
 func NewMonitor() *Monitor {
+	go lCommon.Log("NewMonitor start")
     m := new(Monitor)
     m.ListTaskSync 			= make(map[int]*lCommon.ListMonitor)
     m.ListTaskSyncHistory 	= make(map[int]*lCommon.ListMonitor)
@@ -68,6 +70,7 @@ func NewMonitor() *Monitor {
     // 	b, _ := json.Marshal(m.dbJson)
     // 	lJsonLog.WriteJson(b)
     // }
+    go lCommon.Log("NewMonitor end")
     return m
 }
 
@@ -93,6 +96,7 @@ type StructItemReturn struct {
 }
 
 func (self *Monitor) GetPrice()(err error){
+	go lCommon.Log("GetPrice start")
 	c := make(chan StructItemReturn)
 
 
@@ -177,24 +181,24 @@ func (self *Monitor) GetPrice()(err error){
 						if(mp.Visible == false){
 							
 							if ( index1 == "kucoin"){
-								pecentUp_ = 0.12
-								pecentDwon_ = 0.25
+								pecentUp_ = 3.4
+								pecentDwon_ = 3.25
 							}
 							if ( index1 == "bittrex"){
-								pecentUp_ = 0.08
-								pecentDwon_ = 0.20
+								pecentUp_ = 3.45
+								pecentDwon_ = 3.45
 							}
 							if (  index1 == "binance" ){
-								pecentUp_ = 0.05
-								pecentDwon_ = 0.15
+								pecentUp_ = 3.07
+								pecentDwon_ = 3.15
 							}
 							if (  index1 == "cryptopia" ){
-								pecentUp_ = 0.6
-								pecentDwon_ = 0.7
+								pecentUp_ = 3.6
+								pecentDwon_ = 3.7
 							}
 							if (  index1 == "gate" ){
-								pecentUp_ = 0.4
-								pecentDwon_ = 0.4
+								pecentUp_ = 3.4
+								pecentDwon_ = 3.4
 							}
 
 
@@ -245,12 +249,12 @@ func (self *Monitor) GetPrice()(err error){
 	// }
 
 	self.LogSave()
-
+	go lCommon.Log("GetPrice end")
 	return nil
 }
 
 func (self *Monitor) Print()(err error){
-
+	go lCommon.Log("Print start")
 	var soundFlagDown = 0
 	var soundFlagUp = 0
 
@@ -276,12 +280,20 @@ func (self *Monitor) Print()(err error){
 	}
 	self.soundAllert(soundFlagUp, soundFlagDown)
 
+	t := time.Now()
+	fmt.Println("\nlMonitor        time: ", t.Format("2006/01/02 15:04:05"))
+
 	lText.ClPrint("\n", "white")
 	lText.ClPrint("\n", "white")
 	for _,i := range self.listError{
 		 lText.ClPrint(i, "red")
 	}
 	self.listError = self.listError[:0]
+	go lCommon.Log("Print end")
+
+	go lCommon.LogPrint()
+	lCommon.LogStop()
+
 	return nil
 }
 
@@ -359,6 +371,7 @@ func (self *Monitor) priceComparison(soundFlagUp* int, soundFlagDown* int, i int
 
 
 func (self *Monitor) LogSave(){
+	go lCommon.Log("LogSave start")
 	if _, ok := self.dbJson["statistics"]; !ok{
 		fmt.Println("LogSave()")
 		var err error 
@@ -392,13 +405,16 @@ func (self *Monitor) LogSave(){
     		}
     	}
 	}
+	go lCommon.Log("LogSave end")
 }
 
 func (self *Monitor) Clear(){
+	go lCommon.Log("Clear start")
 	if err := lCommon.PlayMusic("./sound/obj_belltower.mp3", 2 ) ; err != nil {
 		// self.listError = append(self.listError, err.Error() )
 	}
 	for i:=0 ; i < len(self.ListTaskSync); i++ {
 		self.ListTaskSync[i].Time = 0
 	}
+	go lCommon.Log("Clear end")
 }

@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"strconv"
 	"errors"
+	"../lCommon"
+	"fmt"
  )
 
 
@@ -52,12 +54,16 @@ func TakeFloat(item map[string]interface{},key string) (float64) {
 }
 
 func GetListSumbolsKucoin()  ( map[string]ListSymbolContent, error) {
-	nameFunction := "GetListSubolsKucoin"
+	nameFunction := "GetListSubolsKucoin"	
+	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
 	resp, err := http.Get("https://api.kucoin.com/v1/market/open/symbols" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
+
+	go lCommon.Log(fmt.Sprintf("end %s", nameFunction))
+
 	if mp, ok := json["data"].( []interface{} ); ok{
 		for _,item := range mp {
 			item := item.(map[string]interface{})
@@ -65,9 +71,9 @@ func GetListSumbolsKucoin()  ( map[string]ListSymbolContent, error) {
 			subIt := ListSymbolContent{	CoinTypePair : 		item["coinTypePair"].(string), 
 										CoinPair 	 : 		item["coinType"].(string),
 										SymbolDual 	 : 		item["symbol"].(string), 
-										Price 		 : 		item["lastDealPrice"].(float64), 
+										Price 		 : 		TakeFloat(item, "lastDealPrice"), //item["lastDealPrice"].(float64), 
 										Trading 	 : 		item["trading"].(bool), 
-										Buy		 	 : 		TakeFloat(item, "buy"), 
+										// Buy		 	 : 		TakeFloat(item, "buy"), 
 										Sell	 	 : 		item["sell"].(float64), 
 										Visible	 	 : 		false, 
 										Volume 		 : 		item["volValue"].(float64) }			
@@ -83,12 +89,14 @@ func GetListSumbolsKucoin()  ( map[string]ListSymbolContent, error) {
 
 func GetListSumbolsBinance()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsBinance"
+	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
 	resp, err := http.Get("https://api.binance.com/api/v3/ticker/price" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect2(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
 
+	go lCommon.Log(fmt.Sprintf("end %s", nameFunction))
 	for _,item := range json {
 		item := item.(map[string]interface{})
 
@@ -106,12 +114,13 @@ func GetListSumbolsBinance()  ( map[string]ListSymbolContent, error) {
 
 func GetListSumbolsGateIo()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsGateIo"
+	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
 	resp, err := http.Get("http://data.gate.io/api2/1/tickers" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
-
+	go lCommon.Log(fmt.Sprintf("end %s", nameFunction))
 	for name,item := range json {
 		item := item.(map[string]interface{})
 		subIt := ListSymbolContent{  SymbolDual 	 : 	name, 
@@ -126,12 +135,13 @@ func GetListSumbolsGateIo()  ( map[string]ListSymbolContent, error) {
 
 func GetListSumbolsBittrex()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsBittrex"
+	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
 	resp, err := http.Get("https://bittrex.com/api/v1.1/public/getmarketsummaries" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
-
+	go lCommon.Log(fmt.Sprintf("end %s", nameFunction))
 	if mp, ok := json["result"].([]interface{}); ok{
 		for _,item := range mp {
 			item := item.(map[string]interface{})
@@ -153,12 +163,13 @@ func GetListSumbolsBittrex()  ( map[string]ListSymbolContent, error) {
 
 func GetListSumbolsBitfinex()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsBitfinex"
+	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
 	resp, err := http.Get("https://api.bitfinex.com/v1/symbols_details" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
-
+	go lCommon.Log(fmt.Sprintf("end %s", nameFunction))
 	if mp, ok := json["result"].([]interface{}); ok{
 		for _,item := range mp {
 			item := item.(map[string]interface{})
@@ -182,12 +193,13 @@ func GetListSumbolsBitfinex()  ( map[string]ListSymbolContent, error) {
 
 func GetListSumbolsCryptopia()  ( map[string]ListSymbolContent, error) {
 	nameFunction := "GetListSumbolsCryptopia"
+	go lCommon.Log(fmt.Sprintf("strat %s", nameFunction))
 	retMapt := make(map[string]ListSymbolContent)
 	resp, err := http.Get("https://www.cryptopia.co.nz/api/GetMarkets" )
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Get() " + err.Error()) }
 	json, err := Connect(resp)
 	if err != nil{ return nil, errors.New(nameFunction + "() -> Connect() " + err.Error() ) }
-
+	go lCommon.Log(fmt.Sprintf("end %s", nameFunction))
 	if mp, ok := json["Data"].([]interface{}); ok{
 		for _,item := range mp {
 			item := item.(map[string]interface{})

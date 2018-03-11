@@ -7,9 +7,15 @@ import (
 	"runtime"
 	"github.com/hajimehoshi/oto"
 	"github.com/hajimehoshi/go-mp3"
+	"time"
 	// "strconv"
-    // "time"
+	"sync/atomic"
+    "fmt"
 )
+
+
+var ChanLog *chan string
+var numLog uint64
 
 
 type ListMonitor struct{
@@ -88,4 +94,43 @@ func PlayMusic(path string, div int64) error {
 	return nil
 }
 
+func Log(str string){
+	atomic.AddUint64(&numLog, 1)
+	*ChanLog <- fmt.Sprintf("[%d] %s", numLog, str)
+}
+
+func LogStop(){
+	*ChanLog <- "stop"
+	numLog = 0
+}
+
+
+func LogPrint(){
+	for {
+	  lg := <- *ChanLog
+	  if( lg == "stop" ){
+	    break
+	  }
+	  fmt.Println("[log] ", lg)
+	}
+}
+
+func CheckTimeoit(c1 chan time.Time){
+
+
+    for {
+      select {
+        case msg1 := <- c1:
+           fmt.Println("\nmain            time: ", msg1.Format("2006/01/02 15:04:05"))
+        case <- time.After(time.Second*25):
+          fmt.Println("\ntimeout")
+
+          go LogPrint()
+          LogStop()
+
+          if err := PlayMusic("./sound/soundBelt.mp3", 3 ) ; err != nil {
+          }
+      }
+    }
+}
 
